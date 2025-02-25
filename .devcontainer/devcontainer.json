@@ -1,0 +1,28 @@
+{
+  "name": "emblincram minimal dev-container",
+  "image": "ghcr.io/emblincram/boxy:latest",
+  "workspaceFolder": "/home/yocto",
+  "remoteUser": "yocto",
+  "extensions": [
+    "ms-vscode.cpptools",
+    "eamodio.gitlens",
+    "ms-python.python"
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "initializeCommand": "${localWorkspaceFolder}/meta-emblincram/toolbox/initialize-command.sh ${localWorkspaceFolder}",
+  "mounts": [
+    "source=${localWorkspaceFolder}/application,target=/home/yocto/app,type=bind",
+    "source=${localWorkspaceFolder}/build,target=/home/yocto/build,type=bind",
+    "source=${localWorkspaceFolder}/meta-arm,target=/home/yocto/meta-arm,type=bind",
+    "source=${localWorkspaceFolder}/meta-ti,target=/home/yocto/meta-ti,type=bind",
+    "source=${localWorkspaceFolder}/meta-openembedded,target=/home/yocto/meta-openembedded,type=bind",
+    "source=${localWorkspaceFolder}/meta-emblincram,target=/home/yocto/meta-enblincram,type=bind",
+    "source=${localWorkspaceFolder}/poky,target=/home/yocto/poky,type=bind",
+    "source=${localWorkspaceFolder}/sstate-cache,target=/home/yocto/sstate-cache,type=bind",
+    "source=${localWorkspaceFolder}/downloads,target=/home/yocto/downloads,type=bind"
+  ],
+  "shutdownAction": "stopContainer",
+  "postCreateCommand": "/home/yocto/meta-emblincram/toolbox/post-create-command.sh /home/yocto"
+}
