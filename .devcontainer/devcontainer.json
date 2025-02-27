@@ -18,7 +18,7 @@
     "source=${localWorkspaceFolder}/meta-arm,target=/home/yocto/meta-arm,type=bind",
     "source=${localWorkspaceFolder}/meta-ti,target=/home/yocto/meta-ti,type=bind",
     "source=${localWorkspaceFolder}/meta-openembedded,target=/home/yocto/meta-openembedded,type=bind",
-    "source=${localWorkspaceFolder}/meta-emblincram,target=/home/yocto/meta-enblincram,type=bind",
+    "source=${localWorkspaceFolder}/meta-emblincram,target=/home/yocto/meta-emblincram,type=bind",
     "source=${localWorkspaceFolder}/poky,target=/home/yocto/poky,type=bind",
     "source=${localWorkspaceFolder}/sstate-cache,target=/home/yocto/sstate-cache,type=bind",
     "source=${localWorkspaceFolder}/downloads,target=/home/yocto/downloads,type=bind"

@@ -1,4 +1,4 @@
-name: Build Yocto Image
+name: Build & Push Docker Image
 
 on:
   push:
@@ -8,32 +8,40 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      trigger:
+        description: "start manually"
+        required: true
+        default: "yes"
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          submodules: true
 
       - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Pull Yocto DevContainer Image
-        run: docker pull ghcr.io/emblincram/boxy:latest
+      - name: Debug - Check files
+        run: ls -R .devcontainer
 
-      - name: Run Yocto Build
+      - name: Set DATE_TAG
+        run: echo "DATE_TAG=$(date +%Y%m%d-%H%M)" >> $GITHUB_ENV
+
+      - name: Build Docker Image
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workspace ghcr.io/emblincram/boxy:latest /bin/bash -c "
-            cd /workspace
-            source poky/oe-init-build-env build
-            bitbake core-image-minimal
-          "
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: yocto-build
-          path: build/tmp/deploy/images/
+          docker build -t ghcr.io/emblincram/devcon:latest \
+                      -t ghcr.io/emblincram/devcon:$DATE_TAG \
+                      -f .devcontainer/Dockerfile .
+      
+      - name: Push Docker Image
+        run: |
+          docker push ghcr.io/emblincram/devcon:latest
+          docker push ghcr.io/emblincram/devcon:$DATE_TAG

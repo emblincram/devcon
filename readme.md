@@ -18,25 +18,25 @@ sudo usermod -aG docker $USER
 Create proper Dockerfile local:
 
 ```bash
-docker build --no-cache -t boxy .
+docker build --no-cache -t devcon .
 ```
 
 Create docker image for ghcr.io:
 
 Organisation / user name: emblincram.
-Image name: boxy.
+Image name: devcon.
 
 ```bash
 echo "${CR_PAT}" | docker login ghcr.io -u emblincram --password-stdin
-docker build -t ghcr.io/emblinkram/boxy:latest .
-docker push ghcr.io/emblinkram/boxy:latest
+docker build -t ghcr.io/emblinkram/devcon:latest .
+docker push ghcr.io/emblinkram/devcon:latest
 ```
 
 Load and use docker image:
 
 ```bash
-docker pull ghcr.io/emblincram/boxy:latest
-docker run -it --rm ghcr.io/emblincram/boxy:latest /bin/bash
+docker pull ghcr.io/emblincram/devcon:latest
+docker run -it --rm ghcr.io/emblincram/devcon:latest /bin/bash
 ```
 
 Remove obsolete image:
