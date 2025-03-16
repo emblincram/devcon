@@ -1,13 +1,9 @@
 {
-  "name": "emblincram minimal dev-container",
+  "name": "minimal dev-container",
   "image": "ghcr.io/emblincram/devcon:latest",
   "workspaceFolder": "/home/yocto",
   "remoteUser": "yocto",
-  "extensions": [
-    "ms-vscode.cpptools",
-    "eamodio.gitlens",
-    "ms-python.python"
-  ],
+  "extensions": ["ms-vscode.cpptools", "eamodio.gitlens", "ms-python.python"],
   "settings": {
     "terminal.integrated.defaultProfile.linux": "bash"
   },
