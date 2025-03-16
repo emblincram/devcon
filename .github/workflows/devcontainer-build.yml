@@ -8,12 +8,16 @@ on:
         required: true
         default: "yes"
 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    env:
-      ORGANISATION_NAME: "emblincram"
-      CONTAINER_NAME: "devcon"
 
     permissions:
       contents: read
@@ -25,22 +29,19 @@ jobs:
 
       - name: Log in to GitHub Container Registry
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin || exit 1
-
-      - name: Debug - Check files
-        run: ls -R .devcontainer
+          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin || exit 1
 
       - name: Set DATE_TAG
         run: echo "DATE_TAG=$(date +%Y%m%d-%H%M)" >> $GITHUB_ENV
 
       - name: Build Docker Image
         run: |
-          docker build --cache-from=ghcr.io/a-eberle/devcon-pq-min:latest \
-                      -t ghcr.io/$ORGANISATION_NAME/$CONTAINER_NAME:latest \
-                      -t ghcr.io/$ORGANISATION_NAME/$CONTAINER_NAME:$DATE_TAG \
+          docker build --cache-from=ghcr.io/${{ github.repository }}:latest \
+                      -t ghcr.io/${{ github.repository }}:latest \
+                      -t ghcr.io/${{ github.repository }}:$DATE_TAG \
                       -f .devcontainer/Dockerfile .
-      
+
       - name: Push Docker Image
         run: |
-          docker push ghcr.io/$ORGANISATION_NAME/$CONTAINER_NAME:latest
-          docker push ghcr.io/$ORGANISATION_NAME/$CONTAINER_NAME:$DATE_TAG
+          docker push ghcr.io/${{ github.repository }}:latest
+          docker push ghcr.io/${{ github.repository }}:$DATE_TAG
